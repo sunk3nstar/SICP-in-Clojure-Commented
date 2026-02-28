@@ -1,0 +1,55 @@
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE and editor files
+.vscode/
+.idea/
+.calva/
+*.swp
+*.swo
+*~
+
+# Build and dependency directories
+target/
+out/
+build/
+node_modules/
+.cache/
+*.class
+*.jar
+*.war
+*.ear
+
+# Project specific (Clojure)
+.cpcache/
+.lein-repl-history
+.lein-failures
+.nrepl-port
+.repl/
+pom.xml.asc
+*.pom.asc
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Miscellaneous
+*.orig
+*.bak
