@@ -2,7 +2,7 @@
   (:require
    [clojure.math :as math]))
 ;; Chapter 1: Building Abstractions with Procedures
-;; The Elements of Programming
+;; 1.1 The Elements of Programming
 
 
 ;; Exercise 1.1
@@ -136,7 +136,7 @@
   ; and produces a reasonable result. Modern Clojure implementations
   ; on contemporary hardware can handle very large numbers efficiently
   ; due to improved numeric type representations and precision.
-  ; However when the number goes large enough or the hardware
+  ; However, when the number goes large enough or the hardware
   ; is old enough, the function would fail as in the Book.
   ; This is because smaller differences like 0.001
   ; in large number could be truncated when the numeric range 

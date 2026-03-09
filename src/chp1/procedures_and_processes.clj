@@ -51,7 +51,7 @@
           (= x 0) (* 2 y)
           (= y 1) 2
           :else (A (- x 1) (A x (- y 1)))
-      ))
+          ))
   (A 1 10)
   (A 2 4)
   (A 3 3)
@@ -97,15 +97,49 @@
     [n]
     (if (< n 3)
       n
-      (loop [a 2  ; f(2)
-             b 1  ; f(1)
-             c 0  ; f(0)
-             cnt 2] ; current n value
+      (loop [a 2                                            ; f(2)
+             b 1                                            ; f(1)
+             c 0                                            ; f(0)
+             cnt 2]                                         ; current n value
         (if (== cnt n)
           a
           (recur (+ a (* 2 b) (* 3 c))
                  a
                  b
                  (inc cnt))))))
+  (fi 4)
+  (== (fr 20) (fi 20))
+  )
+
+;; Exercise 1.12
+(comment
+  ; Denote Pascal's triangle as
+  ; C_0^0
+  ; C_1^0 C_1^1
+  ; C_2^0 C_2^1 C_2^2
+  ; ...
+  ; There is $C_m^n=C_{m-1}^n+C_{m-1}^{n-1}$
+  (defn C
+    [m n]
+    (cond (= n 0) 1
+          (= m n) 1
+          :else (+ (C (- m 1) n) (C (- m 1) (- n 1))))
     )
-)
+  (C 4 2)
+  )
+
+;; Exercise 1.13
+; Denote the state transfer with matrices
+; Fib(n)      1   1   Fib(n-1)
+;           =
+; Fib(n-1)    1   0   Fib(n-2)
+; So (Fib(n+1) Fib(n))^T = A^n (Fib(1) Fib(0))^T
+; where A = [[1 1],[1 0]].
+; To compute A^n, use Cayley-Hamilton Theorem
+; A^2 - A - 1 = O, the eigenvalues of A are $\varphi$ and $\phi$
+; choose a and b, where x^n = f(x) = q(x)(x^2-x-1) + ax + b
+; \varphi^n = a\varphi + b
+; \phi^n = a\phi + b
+; A^n = aA + b = [[a+b a],[a 0]]
+; Fib(n) = aFib(1) = a
+; Solve a and the proof is completed.
