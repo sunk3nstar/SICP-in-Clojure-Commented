@@ -55,12 +55,12 @@
   (A 1 10)
   (A 2 4)
   (A 3 3)
-  ; (A 0 n) => $2n$
-  ; (A 1 n) => $2A(1, n-1)$
-  ;         => $2^(n-1)A(1, 1)$
-  ;         => $2^n$
-  ; (A 2 n) => $A(1,A(2,(n-1))$
-  ;         => $2^2^...2\ (^n 2)$
+  ; $(A\ 0\ n) \Rightarrow 2n$
+  ; $(A\ 1\ n) \Rightarrow 2 \cdot A(1, n-1)$
+  ;         $\Rightarrow 2^{n-1} \cdot A(1, 1)$
+  ;         $\Rightarrow 2^n$
+  ; $(A\ 2\ n) \Rightarrow A(1, A(2, (n-1)))$
+  ;         $\Rightarrow 2^{2^{\cdot^{\cdot^{\cdot^{2}}}}}$ (a tower of exponents of height $n$)
   )
 
 ;; Exercise 1.11
@@ -129,17 +129,25 @@
   )
 
 ;; Exercise 1.13
-; Denote the state transfer with matrices
-; Fib(n)      1   1   Fib(n-1)
-;           =
-; Fib(n-1)    1   0   Fib(n-2)
-; So (Fib(n+1) Fib(n))^T = A^n (Fib(1) Fib(0))^T
-; where A = [[1 1],[1 0]].
-; To compute A^n, use Cayley-Hamilton Theorem
-; A^2 - A - 1 = O, the eigenvalues of A are $\varphi$ and $\phi$
-; choose a and b, where x^n = f(x) = q(x)(x^2-x-1) + ax + b
-; \varphi^n = a\varphi + b
-; \phi^n = a\phi + b
-; A^n = aA + b = [[a+b a],[a 0]]
-; Fib(n) = aFib(1) = a
-; Solve a and the proof is completed.
+; Denote the state transfer with matrices:
+; 
+; $\begin{pmatrix} F_{n} \\ F_{n-1} \end{pmatrix}
+;  = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}
+;    \begin{pmatrix} F_{n-1} \\ F_{n-2} \end{pmatrix}$
+;
+; So $\begin{pmatrix} F_{n+1} \\ F_{n} \end{pmatrix} = A^n \begin{pmatrix} F_{1} \\ F_{0} \end{pmatrix}$
+; where $A = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}$.
+;
+; To compute $A^n$, use the Cayley–Hamilton theorem:
+; $A^2 - A - I = 0$, where $I$ is the identity matrix.
+; The eigenvalues of $A$ are $\varphi = \frac{1+\sqrt{5}}{2}$ and $\phi = \frac{1-\sqrt{5}}{2}$.
+;
+; Choose $a$ and $b$ such that $x^n = q(x)(x^2 - x - 1) + a x + b$.
+; Then $\varphi^n = a \varphi + b$ and $\phi^n = a \phi + b$.
+;
+; Consequently, $A^n = a A + b I = \begin{pmatrix} a+b & a \\ a & b \end{pmatrix}$.
+;
+; Since $F_n$ is the (1,2) entry of $A^n$ (or noting that $F_n = a F_1 = a$),
+; we obtain $F_n = a$.
+;
+; Solving for $a$ completes the proof.
