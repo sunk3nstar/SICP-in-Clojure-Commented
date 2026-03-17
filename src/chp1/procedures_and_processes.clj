@@ -151,3 +151,59 @@
 ; we obtain $F_n = a$.
 ;
 ; Solving for $a$ completes the proof.
+
+;; Exercise 1.14
+(comment
+  ; `tap` in clojure is convenient for debug print.
+  (add-tap println)
+
+  (declare cc)
+  (declare first-denomination)
+  (defn count-change
+    [amount]
+    (cc amount 5)
+    )
+  (defn cc [amount kind-of-coins]
+    (tap> [::cc amount kind-of-coins])
+    (cond (= amount 0) 1
+          (or (< amount 0) (= kind-of-coins 0)) 0
+          :else (+ (cc amount (- kind-of-coins 1))
+                   (cc (- amount (first-denomination kind-of-coins)) kind-of-coins))
+          )
+    )
+  (defn first-denomination [kind-of-coins]
+    (cond (= kind-of-coins 1) 1
+          (= kind-of-coins 2) 5
+          (= kind-of-coins 3) 10
+          (= kind-of-coins 4) 25
+          (= kind-of-coins 5) 50)
+    )
+  (count-change 11)
+
+  ;"
+  ; In general, the number of steps required by a tree-recursive process will be
+  ; proportional to the number of nodes in the tree, while the space required
+  ; will be proportional to the maximum depth of the tree.
+  ;"
+  ; The space complexity is O(n) obviously.
+  ; For the time complexity, note that the in general (cc n k) = (cc n k-1) + (cc n-d_k k),
+  ; when n goes large enough (cc n k) \approx (cc n k-1) + (cc n-1 k-1) \approx n^k
+  ; in this case the time complexity is O(n^5).
+  )
+
+;; Exercise 1.15
+(comment
+  (defn cube [x] (* x x x))
+  (defn p [x] (- (* 3 x) (* 4 (cube x))))
+  (defn sine [angle]
+    (if (not (> (abs angle) 0.1))
+      angle
+      (p (sine (/ angle 3.0)))))
+
+  ; The process divide the angle by 3 repeatedly until it goes below 0.1.
+  ; So for angle `a`, the number of steps `n` satisfies
+  ; $\frac{|a|}{3^n}<0.1$. Consequently, the time complexity is O(log n)
+  ; This is a linear recursive process, where each call of `sine` has to
+  ; be saved. Therefore, the space needed grows at the same pace with
+  ; the number of steps, which is O(log n).
+  )
