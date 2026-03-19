@@ -207,3 +207,79 @@
   ; be saved. Therefore, the space needed grows at the same pace with
   ; the number of steps, which is O(log n).
   )
+
+;; Exercise 1.16
+(comment
+  ; b^n=b\times b^(n-1) when n is odd.
+  ; b^n=b^(n/2)*b^(n/2)=(b^2)^(n/2) when n is even, which makes it
+  ; possible to exponentially reduce the complexity.
+  (defn fast-expo [base pow]
+    (defn is-even? [n] (= (mod n 2) 0))
+    (defn fast-expo-iter [base pow accumulation]
+      ; Instead of (* accumulation (fast-expo ...)), we carry the
+      ; accumulation into the next call as a state. So, it will not
+      ; be necessary to record the current call for later use.
+      (cond (= pow 0) accumulation
+            (is-even? pow) (fast-expo-iter (* base base) (/ pow 2) accumulation)
+            :else (fast-expo-iter base (- pow 1) (* accumulation base))
+            )
+      )
+    (fast-expo-iter base pow 1)
+    )
+  (fast-expo 5 3)
+  (fast-expo 2 16)
+  )
+
+;; Exercise 1.17 & 1.18
+(comment
+  (defn is-even? [n] (= (mod n 2) 0))
+  (defn double-mul [n] (+ n n))
+  (defn halve [n] (quot n 2))
+  ; Exercise 1.17
+  (defn rpm-recursive
+    "'This algorithm, which is sometimes known as the *Russian peasant method* of multiplication, is ancient'"
+    [a b]
+    (cond (= b 0) 0
+          (is-even? b) (double-mul (rpm-recursive a (halve b)))
+          :else (+ a (rpm-recursive a (- b 1)))
+          )
+    )
+  (rpm-recursive 25 36)
+  ; Exercise 1.18
+  (defn rpm-iterative [a b]
+    (defn rpm-iter [x y accumulation]
+      (cond (= y 0) accumulation
+            (is-even? y) (rpm-iter (double-mul x) (halve y) accumulation)
+            :else (rpm-iter x (- y 1) (+ accumulation x)))
+      )
+    (rpm-iter a b 0)
+    )
+  (rpm-iterative 25 36)
+  )
+
+;; Exercise 1.19
+(comment
+  ; Tpq: a <- bq + aq + ap  b <- bp + aq
+  ; Calculate brutally, we have
+  ; Tpq^2: a <- b(q^2 + 2pq) + a(q^2 + 2pq) + a(p^2 + q^2)
+  ;        b <- b(p^2 + q^2) + a(q^2 + 2pq)
+  ; Tpq^2 = T(p^2 + q^2)(q^2 + 2pq)
+  (defn is-even? [n] (= (mod n 2) 0))
+  (declare fib-iter)
+  (defn fib
+    "To compute fib(n) is to compute T01^n(1,0)"
+    [n] (fib-iter 1 0 0 1 n))
+  (defn fib-iter [a b p q count]
+    (cond (= count 0) b
+          ; when n is even:
+          ; Tpq^n(a,b) = Tpq(Tpq...Tpq(a,b)) (n times)
+          ;            = Tpq^2(Tpq^2...Tpq^2(a,b)) (n/2 times)
+          ;            = T(p^2 + q^2)(q^2 + 2pq)^(n/2)(a,b)
+          (is-even? count) (fib-iter a, b, (+ (* p p) (* q q)), (+ (* q q) (* 2 p q)) (/ count 2))
+          ; when n is odd:
+          ; Tpq^n(a,b) = Tpq^(n-1)(Tpq(a,b))
+          :else (fib-iter (+ (* b q) (* a q) (* a p)), (+ (* b p) (* a q)), p, q, (- count 1))
+          ))
+  (fib 7)
+  (fib 50)
+  )
